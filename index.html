@@ -1,0 +1,842 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analyzing Agricultural Outcomes in Iowa Tutorial</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#analyzing-agricultural-outcomes-in-iowa">Analyzing Agricultural Outcomes in Iowa</a>
+<ul>
+<li><a href="#introduction">1. Introduction</a></li>
+<li><a href="#how-to-use-this-tutorial">2. How to Use This Tutorial</a></li>
+<li><a href="#data">3. Data</a></li>
+  <ul> 
+      <li><a href="#downloading-the-data">3.1 Downloading the Data</a></li>
+  </ul>
+<li><a href="#quick-start-in-arcgis-pro">4. Quick Start in ArcGIS Pro</a></li>
+  <ul>
+    <li><a href="#accessing-arcgis-pro">4.1 Accessing ArcGIS Pro</a></li>
+    <li><a href="#create-a-new-map">4.2 Create a New Map</a></li>
+    <li><a href="#arcgis-pro-interface">4.3 ArcGIS Pro Interface</a></li>
+  </ul>
+<li><a href="#cafos-and-ej-communities">5. CAFOs and EJ Communities</a></li>
+  <ul>
+    <li><a href="#problem-statement--rationale">5.1 Problem Statement and Rationale</a></li>
+    <li><a href="#add-data-to-your-map">5.2 Add Data to Your Map</a></li>
+    <li><a href="#query-data">5.3 Query Data</a></li>
+    <li><a href="#symbolizing-data">5.4 Symbolizing Data</a></li>
+      <ul>
+        <li><a href="#approach-1-choropleth-map-using-a-single-variable">5.4.1 Approach #1: Choropleth Map Using a Single Variable</a></li>
+        <li><a href="#approach-2-bivariate-choropleth-map">5.4.2 Approach #2: Bivariate Choropleth Map</a></li>
+        <li><a href="#compare-the-two-symbology-approaches">5.4.3 Compare the Two Symbology Approaches</a></li>
+      </ul>
+  </ul>
+  <ul>
+    <li><a href="#create-buffers">5.5 Create Buffers</a></li>
+    <li><a href="#select-features-by-attribute-and-location">5.6 Select Features By...</a></li>
+      <ul>
+        <li><a href="#select-by-attributes">5.6.1 Select by Attributes</a></li>
+        <li><a href="#select-by-location">5.6.2 Select by Location</a></li>
+      </ul>
+  </ul>
+ <li><a href="#environmental-degradation-due-to-agricultural-practices">6. Environmental Degradation due to Agricultural Practices</a></li>
+  <ul>
+    <li><a href="#problem-statement--rationale-1">6.1 Problem Statement and Rationale</a></li>
+    <li><a href="#insert-a-new-map-within-an-existing-project">6.2 Insert a New Map within an Existing Project</a></li>
+    <li><a href="#tabulate-intersection">6.3 Tabulate Intersection</a></li>
+    <li><a href="#pivot-table">6.4 Pivot Table</a></li>
+    <li><a href="#join-field">6.5 Join Field</a></li>
+    <li><a href="#chart-symbols">6.6 Chart Symbols</a></li>
+    <li><a href="#raster-calculations">6.7 Raster Calculations</a></li>
+    <li><a href="#reclassify-field">6.8 Reclassify Field</a></li>
+    <li><a href="#calculate-new-field">6.9 Calculate New Field</a></li>
+   </ul>
+  <li><a href="#communicating-with-maps">7. Communicating with Maps</a></li>
+    <ul>
+      <li><a href="#compilation-of-problem-statements-and-suggested-layers-to-use">7.1 Compilation of Problem Statements and Suggested Layers to Use</a></li>
+      <li><a href="#map-layout">7.2 Map Layout</a></li>
+        <ul>
+          <li><a href="#insert-a-new-layout">7.2.1 Insert a New Layout</a></li>
+        </ul>
+      <li><a href="#basic-map-elements">7.3 Basic Map Elements</a></li>
+      <li><a href="#map-design">7.4 Map Design</a></li>
+      <li><a href="#get-feedback-on-your-map">7.5 Get Feedback on Your Map</a></li>
+      <li><a href="#export-map">7.6 Export Layout</a></li>
+    </ul>
+</ul>
+</li>
+</ul>
+<script>
+  function Tgl(click_id) {
+    var x = document.getElementById(click_id);
+    var z = click_id.match(/\d+/)[0];
+    var y = click_id.slice(-3);
+    var w = document.getElementById(y);
+    var t = document.getElementById(`p${y}`);
+
+    /* If [+] is visible, make it invisible and display [-] - and vice versa*/
+    if (click_id.indexOf('p') >= 0) {
+      if (x.style.display === "none") {
+        x.style.display = "inline";
+        w.style.display = "none";
+      }
+      if (x.style.display === "inline") {
+        x.style.display = "none";
+        w.style.display = "inline";
+      }
+    } else {
+      if (x.style.display === "none") {
+        x.style.display = "inline";
+        t.style.display = "none";
+      }
+      if (x.style.display === "inline") {
+        x.style.display = "none";
+        t.style.display = "inline";
+      }
+    }
+    /*Toggle dropdown display onclick*/
+    document.getElementById(`lvl${y}`).classList.toggle("tshow");
+    /*Increment list spacing with each nest*/
+    var p = document.getElementById(`lvl${y}`);
+    p.style.left = (9 * z) + 'px';
+}
+
+</script>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="analyzing-agricultural-outcomes-in-iowa">Analyzing Agricultural Outcomes in Iowa</h1>
+<p><em>By Tracy Tien, <a href="https://www.science.smith.edu/sal/">Smith College Spatial Analysis Lab</a> in consultation with Denise Lello</em></p>
+<h2 id="introduction">Introduction<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup></h2>
+<p>In our explorations of the history of agricultural land use and its impacts on environmental and human health, we are reading about the changes to farming in the U.S. including the shift from smaller family farms that produced a variety of crops, to large industrial monocultures. This raises the question: What are the adverse environmental and cultural impacts and how are these impacts distributed among disadvantaged communities? The US Midwest, “America’s Breadbasket,” is especially tan<em>till</em>izing in terms of environmental degradation due to farming.<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup></p>
+<p>In anticipation for this lab, we reviewed the <a href="https://soilsrevealed.org/explore?state=eyJtYXAiOnsidmlld3BvcnQiOnsiem9vbSI6NS4wMzkzNTA4MzgwMTAwNjksImxhdGl0dWRlIjo0My45MzkyOTA0NDc1ODExMiwibG9uZ2l0dWRlIjotOTEuNDQyNjUwMDAwMDAzNzR9LCJiYXNlbWFwIjoibGlnaHQiLCJiYXNlbWFwUGFyYW1zIjpudWxsLCJyb2FkcyI6ZmFsc2UsImxhYmVscyI6ZmFsc2UsImJvdW5kYXJpZXMiOnsiaWQiOiJwb2xpdGljYWwtYm91bmRhcmllcyJ9LCJsYXllcnMiOnsic29jLXN0b2NrIjp7InZpc2libGUiOnRydWUsIm9wYWNpdHkiOjEsIm9yZGVyIjowLCJ0eXBlIjoiaGlzdG9yaWMiLCJtb2RlIjoiY2hhbmdlIiwiZGVwdGgiOiIwIiwicGVyaW9kIjoiaGlzdG9yaWMiLCJzY2VuYXJpbyI6IjEwIiwieWVhciI6IjIwMzgiLCJ5ZWFyMSI6MjAwMCwieWVhcjIiOjIwMTh9fX0sImFuYWx5c2lzIjp7ImFyZWFJbnRlcmVzdCI6eyJpZCI6MTAyMywibmFtZSI6Iklvd2EiLCJsZXZlbCI6MSwicGFyZW50SWQiOjcsInBhcmVudE5hbWUiOiJVbml0ZWQgU3RhdGVzIiwiYmJveCI6W1stOTYuNjM1Nyw0MC4zNzQ1XSxbLTkwLjEzOTMsNDMuNTA0N11dfSwiY29tcGFyZUFyZWFJbnRlcmVzdCI6bnVsbH19">Soils Reveal Project for soil carbon loss in Iowa</a>. These maps display soil carbon losses due to land use practices. Industrial agricultural practices such as tilling and reliance on heavy use of fertilizer and pesticide have resulted in a loss of carbon storage in the soil and its release into the atmosphere where it contributes to planetary warming. Carbon emissions (not incorporatd in the Soils Revealed models) are further increased due to the shift from production of food intended directly for human consumption and feed for livestock and industrial food products such as corn syrup and other by-products of corn including ethanol.</p>
+<p>These exercises are intended to allow you to use various data layers to analyze and visualize these issues in a <strong>GIS (Geographic Information System)</strong> using ArcGIS Pro.</p>
+<p>Some of the large questions we would like to investigate, based on our course explanations are:</p>
+<ol>
+<li>Are factors such as crop type or farm size associated with different levels of impact on soil carbon storage or water quality?</li>
+<li>Can we detect environmental justice issues in the sitings of concentrated animal feeding operations (CAFOs) </li>
+</ol>
+<h2 id="how-to-use-this-tutorial">How to Use This Tutorial</h2>
+<p>The aspirations for this tutorial is to introduce you to</p>
+<dl>
+<dt>GIS</dt>
+<dd>Geographic Information System, a framework to create, manage, analyze, and visualize data that have a geographic component</dd>
+<dt>spatial analysis</dt>
+<dd>an exploratory process to quantify an observed pattern and the underlying processes that created that pattern</dd>
+<dt>how all maps lie</dt>
+<dd>from critically acclaimed <em>How to Lie with Maps</em> by Mark Monmonier, maps tell spatial narratives that support a perspective, therefore we need to be conscientious of the data and the interpretation and representation of the information</dd>
+</dl>
+<p>The tutorial renders best in Chrome or Firefox; Safari doesn't load the graphics.</p>
+<p>
+  <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+This provides additional information that helps contextualize what you're doing.
+  </div>
+  <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+This is a tip/trick in ArcGIS Pro to try if you're feeling zesty!
+  </div>
+  <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+This is a cautionary tale.
+  </div>
+<h2 id="data">Data</h2>
+<p>A spatial data layer is geographic data that serve as the building blocks of your maps and analysis, and you choose the layers to “interact” with each other to form new layers that would answer your spatial question.</p>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1FRJGwITWLSgD70UGqlwoL31C8cZJ5wxG" alt="GIS data layers" width="350"><sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup></p>
+<h3 id="downloading-the-data">Downloading the Data</h3>
+<ol>
+<li>On the Windows taskbar, go to <em>File Explorer</em> <i class="material-icons">folder</i> &gt;&gt; <em>This PC</em> &gt;&gt; <em>GIS Data (Q:)</em>.</li>
+<li>Click on the <em>Classes</em> folder &gt;&gt; <em>ENV201_202</em> &gt;&gt; click into <em>Spring2022</em>. Copy and paste the <em>FarminginIA_ExerciseData</em> folder into your <em>GIS Home (J:)</em> folder.</li>
+</ol>
+  <div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+If you don't see a GIS Data (Q:) or GIS Home(J:) in <em>This PC</em>, click on the <em>Computer</em> tab at the top of the window >> <em>Map Network Drive</em>. Enter <code>\\bass-nas\gis\gisdata</code> for Q:/ and <code>\\bass-nas\gis\gishome\yourusername</code> for J:/
+  </div>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=12IsL9viX39NcVuwOso7Bd07WqMy_TqwB" alt="Copy and paste exercise data from Q: to J:"></p>
+<p>The datasets we’re using for these labs come from a variety of <a href="https://geoawesomeness.com/what-is-authoritative-geospatial-data/#:~:text=In%20the%20geospatial%20context,%20the,property%20boundaries,%20and%20permit%20applications.">authoritative sources</a>. Please review the following table, especially <a href="https://www.fgdc.gov/metadata#:~:text=Metadata%20is%20information%20about%20data,other%20location-based%20data%20resources.">metadata</a> associated with each layer that will help you decipher the information.</p>
+
+<table>
+<thead>
+<tr>
+<th>Description</th>
+<th>Layer Name</th>
+<th>Type of Data</th>
+<th>Source &amp; Metadata</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Animal feeding facilities</td>
+<td>animal_feeding_operations.shp</td>
+<td>vector - points</td>
+<td><a href="https://geodata.iowa.gov/documents/iowadnr::animal-feeding-operations-download/about">Iowa Geospatial Data/Iowa Department of Natural Resources</a></td>
+</tr>
+<tr>
+<td>EJScreen (National)</td>
+<td>EJSREEN_Full.shp</td>
+<td>vector - polygons</td>
+<td><a href="https://www.epa.gov/ejscreen/download-ejscreen-data">EPA</a></td>
+</tr>
+<tr>
+<td>Agricultural land use by field</td>
+<td>IowaFieldBoundaries2019.shp</td>
+<td>vector - polygons</td>
+<td><a href="https://geodata.iowa.gov/documents/iowa::agricultural-land-use-by-field-iowa-2010-2019-acpf/about">Iowa Geospatial Data</a></td>
+</tr>
+<tr>
+<td>County boundaries</td>
+<td>IowaCounties.shp</td>
+<td>vector - polygons</td>
+<td><a href="https://geodata.iowa.gov/datasets/iowa::iowa-county-boundaries/about">Iowa Geospatial Data</a></td>
+</tr>
+<tr>
+<td>Private wells</td>
+<td>Private_Well_Facilities.shp</td>
+<td>vector - points</td>
+<td><a href="https://geodata.iowa.gov/datasets/iowadnr::private-well-facilities/about">Iowa Geospatial Data/Iowa Department of Natural Resources</a></td>
+</tr>
+<tr>
+<td>Nitrate testing in private well water by county in 2010 &amp; 2020</td>
+<td>Nitrate_County2010.csv; Nitrate County2020.csv</td>
+<td>tabular</td>
+<td><a href="https://tracking.idph.iowa.gov/Environment/Private-Well-Water/Nitrate-Testing-Data">Iowa Public Health Tracking Portal</a></td>
+</tr>
+<tr>
+<td>Soil organic carbon on croplands</td>
+<td>soc_t1_30cm.tif</td>
+<td>raster</td>
+<td><a href="https://ciat.cgiar.org/global-soil-carbon/">CIAT (International Center for Tropical Agriculture)</a></td>
+</tr>
+<tr>
+<td>Potential soil organic carbon on croplands after 20 years medium scenario</td>
+<td>soc_t2_me.tif</td>
+<td>raster</td>
+<td><a href="https://ciat.cgiar.org/global-soil-carbon/">CIAT</a></td>
+</tr>
+</tbody>
+</table><p>Other data that were used to supplement the above layers:</p>
+<ul>
+<li>Land use/land cover cropland data for Iowa, from <a href="https://datagateway.nrcs.usda.gov/GDGHome.aspx">USDA NRCS</a></li>
+</ul>
+<p>The spatial reference is: NAD83 UTM Zone 15N; unit is in meters.
+<h2 id="quick-start-in-arcgis-pro">Quick Start in ArcGIS Pro</h2>
+<h3 id="accessing-arcgis-pro">Accessing ArcGIS Pro</h3>
+<ol>
+<li>In the Windows taskbar, search for “ArcGIS Pro” <img src="http://drive.google.com/uc?export=view&amp;id=1CtyW6IlDfN7_szastH7aELBN7vAoJSii" alt="ArcGIS Pro logo" width="33"> and launch the program.</li>
+<li>On the login page, click on <strong>Your ArcGIS Organization’s URL</strong>, and type in <code>smithcollege</code>; click on <strong>Smith College Spatial Analysis Lab</strong>, then use your credentials</li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1rtCDOaBuJ-qpsyg5ujp43Sl3vudraPqg" alt="ArcGIS Pro enterprise sign-on"></p>
+<h3 id="create-a-new-map">Create a New Map</h3>
+<ol>
+<li>Under <strong>New</strong>, click <strong>Map</strong><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1GYungcAixFewJXxXKKdwS_QC7PwJjFU9" alt="open new map" width="250"></li>
+<li>When prompted to <strong>Create a New Project</strong>:
+<ul>
+<li>Name your project <code>FarminginIA_yourinitials</code></li>
+<li>Specify the save location to your J:/ folder by clicking on the folder icon <i class="material-icons">folder_open</i> &gt;&gt; <em>This PC</em>, click on <em>J:/</em> then <strong>OK</strong>.</li>
+</ul>
+</li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1HCoQKUm2e8CvfjiyXn9Ps1RY7wBzZT3M" alt="create a new project"></p>
+<h3 id="arcgis-pro-interface">ArcGIS Pro Interface</h3>
+<p>Watch this brief orientation to the interface:</p>
+ <iframe width="850" height="480" src="https://www.youtube.com/embed/gx0NgBpOGFQ" title="YouTube video player" allowfullscreen=""></iframe>
+<p><img src="http://drive.google.com/uc?export=view&id=1e3ztuj9faGKTpfTqbw9aF5xGNdo89I3I" alt="ArcGIS Pro interface guide"></p>
+<h2 id="cafos-and-ej-communities">CAFOs and EJ Communities</h2>
+<h3 id="problem-statement--rationale">Problem Statement &amp; Rationale</h3>
+<p>How can we illustrate which concentrated animal feeding operations (CAFOs) place additional burdens on environmental justice communities?</p>
+<p>To contextualize our workflow, we need to define and propose our criteria:</p>
+<dl>
+<dt>EJ communities</dt>
+<dd>Under Executive Order 12898, within the environmental justice framework, socially vulnerable communities are identified by the relative percents of low income and minority households, within them, the percentages of two factors averaged together.<sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup> The units for EJ communities are census block groups.</dd>
+<dt>Living 3 miles from a CAFO increases respiratory health issues</dt>
+<dd><a href="https://www.sciencedirect.com/science/article/pii/S0160412018320750">This study</a> suggests: “residential proximity to a CAFO was associated with reduced lung function and self-reported asthma at a distance within 3-4 miles.”</dd>
+</dl>
+<p>Our workflow:</p>
+<ul>
+<li>Use the EJScreen layer to show where census block groups that are both low-income and minority</li>
+<li>Analyze the animal feeding operations layer to delineate areas that are within 3 miles</li>
+<li>Use the areas that are within 3 miles from a CAFO to find which EJ communities are impacted</li>
+</ul>
+<h3 id="add-data-to-your-map">Add Data to Your Map</h3>
+<ol>
+<li>On the right-side of the entire interface, click on the <strong>Catalog</strong> pane tab &gt;&gt; right-click on <strong>Folders</strong> &gt;&gt; <strong>Add Folder Connection</strong>
+<ul>
+<li>Navigate to <em>This PC</em> &gt;&gt; <em>GIS Home (J:)</em> &gt;&gt; OK</li>
+</ul>
+</li>
+<p><img src="http://drive.google.com/uc?export=view&id=10V9omhi5aq9gQljHz_08wKKNsWmjyOCF" alt="Add folder connection"></p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+If you recieve an error: "Unable to Access Network Drive." Open Windows File Explorer, click and drag & drop the J: folder into the ArcGIS Pro Catalog pane.
+</div>
+<li>Double-click on <strong>Folders</strong> to expand, and you will see your GIS Home (J:) folder. Expand the J: folder to see the <em>FarminginIA_ExerciseData</em> folder we copied earlier.</li>
+<li>When you open the FarminginIA_ExerciseData folder, you will see all the data layers for the tutorial</li>
+<li>To add a data layer to the map, click on <em>EJSCREEN_Full.shp</em> and drap and drop into the map
+<ul>
+<li>On the left <strong>Contents</strong> pane, you will see the EJSCREEN_Full layer</li>
+</ul>
+</li>
+<p><img src="http://drive.google.com/uc?export=view&id=1mYIwye8LafCC9h_pDjWWgehdjpDfKc1Y" alt="Add data layer"></p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+Check/uncheck thee box left to the layer to turn on/off the visibility.
+  </div>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<p><img src="http://drive.google.com/uc?export=view&id=1qrOR0VqgRIkgsL1cDKg5MEl_Ch_QrU4i" alt="Save"></p>
+<h3 id="query-data">Query Data</h3>
+<p>As you can see, the EJScreen data are of the contiguous US and Alaska, but we want to focus on Iowa. So, we want to create a subset of the EJScreen layer that is of Iowa.</p>
+<ol>
+<li>In <strong>Contents</strong>, right-click on the <em>EJSCREEN_Full</em> layer, and find <strong>Properties</strong> at the bottom of the drop-down</li>
+<p><img src="http://drive.google.com/uc?export=view&id=1NlhVFNYu34rtKyQxdmk_XfAP06VI8Bou" alt="Layer properties"></p>
+<li>Under the <strong>Definition Query</strong> tab &gt;&gt; <strong>+ New definition query</strong>
+<ul>
+<li>The expression is: Where <code>STATE_NAME</code> is equal to <code>Iowa</code>. Click <strong>Apply</strong> &gt;&gt; <strong>OK</strong></li>
+</ul>
+</li>
+<p><img src="http://drive.google.com/uc?export=view&id=1_4r3KwjJMY_pO-jlRx3omCri2jLc_pGA" alt="Definition query"></p>
+<li>In <strong>Contents</strong>, with <em>EJSCREEN_Full</em> layer selected, click once to rename the layer to <code>EJSCREEN_Iowa</code></li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+To zoom to the full extent of the layer you're working with, right-click >> Zoom to Layer.
+  </div>
+<h3 id="symbolizing-data">Symbolizing Data</h3>
+<p>To show the EJ communities in Iowa, we need to show where the census block groups are both low-income and minority. We will take two different approaches and consider how effective each are.</p>
+<h4 id="approach-1-choropleth-map-using-a-single-variable">Approach #1: Choropleth Map Using a Single Variable</h4>
+<p>The term “choropleth” comes from Greek “choro” (area) and “plethos” (multitude). A choropleth map thus uses a color gradient to show quantities over a geographic area.</p>
+<p>This means we should choose one variable depicted within the EJScreen data to apply this <strong>graduated symbology</strong>.</p>
+<ol>
+<li>Right-click on <em>EJSCREEN_Iowa</em>, then <strong>Open Attribute Table</strong>, scroll across to examine what information is available in this layer</li>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+As you scroll across, the columns (referred to as “fields” in GIS) are plenty and with cryptic names like “ACSTOTPOP.” By referencing the EJSCREEN Technical Documentation, you can figure out what each field means. (ACSTOTPOP means American Community Survey Total Population)
+  </div>
+<li>We will use “P_VULEOPCT”, which is the numeric percentile Demographic Index = (% minority + % low-income)/2<sup class="footnote-ref"><a href="#fn5" id="fnref5">5</a></sup></li>
+<li>Right-click on <em>EJSCREEN_Iowa</em> &gt;&gt; <strong>Symbology</strong>. This will prompt the Symbology pane to open on the right side.
+<ul>
+<li>Under <strong>Primary symbology</strong>, choose <strong>Graduated Colors</strong></li>
+<li>Next under <strong>Field</strong>, select “P_VULEOPCT”</li>
+<li>Under <strong>Color Scheme</strong>, choose “Oranges (continuous)”</li>
+</ul>
+</li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&id=1ODwqxpOOfJsML5sheoBvc-2Mco2PIieh" alt="Graduated colors"></p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+Because we're depicting one variable, best practice is to use a single color gradient to represent that intuitively.
+  </div>
+<p>Under the environmental justice framework, this map shows the census block groups in Iowa from less socially vulnerable (light orange) to more vulnerable (deep orange).</p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h4 id="approach-2-bivariate-choropleth-map">Approach #2: Bivariate Choropleth Map</h4>
+<p>Socioeconomic status (like income) is intricately intertwined with certain race and ethnicity (minority)<sup class="footnote-ref"><a href="#fn6" id="fnref6">6</a></sup> – so we would expect that the two variables, low-income and minority, are somewhat related. This is why we can use bivariate mapping to show where the two variables are in agreement or not.</p>
+<ol>
+<li>Right-click on <em>EJSCREEN_Iowa</em> &gt;&gt; <strong>Copy</strong>, then immediately above (still in <strong>Contents</strong>), under <strong>Map</strong>, right-click to <strong>Paste</strong>
+<ul>
+<li>Rename this layer <code>EJSCREEN_Iowa_Bivariate</code></li>
+</ul>
+</li>
+<li>Open Symbology for <em>EJSCREEN_Iowa_Bivariate</em>
+<ul>
+<li>Under <strong>Primary symbology</strong>, choose <strong>Bivariate colors</strong></li>
+<li>For Field 1, choose “P_MINORPCT” and Field 2, “P_LWINPCT”</li>
+</ul>
+</li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&id=1VC6L82U8mvzcqHDX1gh1a9Dl3LHxNEdv" alt="Bivariate colors"></p>
+<p>This map shows where minority population (% of total population within the census block group) are in the high percentile compared to the rest of the country (pink), where low income population (%) are in the high percentile (blue), and where there are least minority + low-income (grey) and most minority + low-income (purple).</p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+EJSCREEN uses percentile to contextualize the value within the rest of the nation. In our example, if the P_VULEOPCT of a census block group is 75, in the 75<sup>th</sup> percentile, this means only 25% of the rest of the nation are at the same level or higher of social vulnerability. 
+  </div>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1TOwdhUsyU__b_LWU-eU0AQoDg_yQvhDV" alt="Interpretation of bivariate symbology"></p>
+<h4 id="compare-the-two-symbology-approaches">Compare the Two Symbology Approaches</h4>
+<ol>
+<li>At the very top of the interface, click into the <strong>Feature Layer</strong> contextual tab set &gt;&gt; <strong>Appearance</strong> &gt;&gt; <strong>Swipe</strong></li>
+<li>Move down to the map view, and an arrow will appear, click anywhere and drag up &amp; down to compare the two approaches to visualize EJ communities in Iowa</li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&id=1vZ7R2_KifZomfFNxKR0cI_XVC7MvkaOl" alt="Swipe"></p>
+<blockquote>
+<p>Which approach do you think is more effective? Why?</p>
+</blockquote>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="create-buffers">Create Buffers</h3>
+<p>Next in our workflow is to delineate areas that are within 3 miles from each locations of animal feeding operations. This process is referred to as “buffering” in spatial analysis.</p>
+<ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+A buffer analysis creates a new data layer, that are buffer zones that have 3-mile radius around each CAFO. The features in this new layer represeent the areas that are impacted respiratory health wise.
+  </div>
+<li>Add the <em>animal_feeding_operations</em> layer to your map</li>
+<li>On the top of the interface, click on the <strong>Analysis</strong> tab &gt;&gt; click on the <strong>Buffer</strong> tool beneath</li>
+<li>This prompts the Buffer tool pane to the right. If not specified below, keep the default:
+<ul>
+<li><strong>Input Features</strong>: select <em>animal_feeling_operations</em></li>
+<li><strong>Output Feature Class</strong>: click on the folder icon, designated your <em>J:/FarminginIA_ExerciseData</em> folder to be the workspace, and name your layer <code>CAFO_Buffer3mile.shp</code></li>
+<li><strong>Distance</strong>: <code>3</code> Miles</li>
+<li><strong>Method</strong>: Geodesic</li>
+<li>Click <strong>Run</strong></li>
+</ul>
+</li>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+Planar refers to straight-line Euclidean distance, whereas geodesic accounts for the curvature of earth.
+  </div>
+<p><img src="http://drive.google.com/uc?export=view&id=1hZU8xaoK76V0XRPHHuvAZ7UFfe5iDcxw" alt="Swipe"></p>
+<li>Turn off the <em>animal_feeding_operations</em> and <em>EJSCREE_Iowa_Bivariate</em> layers</li>
+<li>With the CAFO_Buffer3mile layer selected, go to the <strong>Appearance</strong> contextual tab set&gt;&gt; under <strong>Effects</strong>, set a <strong>Transparency</strong> of 35%</li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="select-features-by-attribute-and-location">Select Features by Attribute and Location</h3>
+<p>By having a semi-transparent 3 mile buffer zone layer displayed on top of the EJ communities layer, we can start to see where EJ communities fall within 3-miles of a CAFO. However, the map is visually busy and it’s unwieldy to manually pick out these particular communities. We can automate this process by:</p>
+<ul>
+<li>Selecting the EJ communities that are considered the highest percentile based on our five classes, any that are &gt; 67.5</li>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+We used Jenks Natural Breaks classification, which binned the data based on variance between each class (distinct breaks in the distribution of the data).
+  </div>
+<li>Using the 3 mile CAFO buffer zones to determine which high EJ communities are within that radius</li>
+</ul>
+<h4 id="select-by-attributes">Select by Attributes</h4>
+<p>To select the highest percentile class of EJ communities, we are using the attribute information associated to make that query. Therefore we use <strong>Select by Attributes</strong>.</p>
+<ol>
+<li>Click on the <em>EJSCREEN_Iowa</em> layer. On the top of the interface, under <strong>Map</strong> tab &gt;&gt; <strong>Select by Attributes</strong> <img src="http://drive.google.com/uc?export=view&id=1LhHMtlGT_L28HJWS41frbLvcF81ydXmG" alt="Select by attributes icon" width="33">
+<ul>
+<li><strong>Input Rows</strong>: EJSCREEN_Iowa</li>
+<li><strong>Selection Type</strong>: New selection</li>
+<li><strong>Add New expression</strong>: Where <code>P_VULEOPCT</code> is greater than <code>67.5</code></li>
+<li>Click <strong>OK</strong></li>
+</ul>
+</li>
+<li>Right-click on the <em>EJSCREEN_Iowa</em> layer &gt;&gt; <strong>Open Attribute Table</strong></li>
+</ol>
+<blockquote>
+<p>Look at the bottom of the table. How many EJ communities are in the high vulnerability class?</p>
+</blockquote>
+<ol start="3">
+<li>We will make a temporary layer by right-clicking the <em>EJSCREEN_Iowa</em> layer &gt;&gt; <strong>Selection</strong> &gt;&gt; <strong>Make Layer from Selected Features</strong>. Rename this layer <code>EJSCREEN_Iowa_HighVul</code></li>
+<li>On top in the <strong>Selection</strong> group, click <strong>Clear</strong> to clear the selection (features that are outlined in neon blue)</li>
+<li>Turn off the <em>EJSCREEN_Iowa</em> layer</li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h4 id="select-by-location">Select by Location</h4>
+<p>To find which of the high EJ communities also fall within the 3-mile CAFO buffer zone, we are using the spatial information to make this query, so we use <strong>Select by Location</strong>.</p>
+<ol>
+<li>Click on <strong>Select by Location</strong> <img src="http://drive.google.com/uc?export=view&id=1hoi9l9dQl9tV6-J65osfn8_huY7eefes" alt="Select by Location icon" width="33">
+<ul>
+<li><strong>Input Features</strong> (the layer to select FROM) : EJSCREEN_Iowa_HighVul</li>
+<li><strong>Relationship</strong>: Intersect</li>
+<li><strong>Selecting Features</strong>: CAFO_Buffer3mile</li>
+<li>Click <strong>OK</strong></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>How many EJ communities are further impacted by adverse respiratory health issues associated with CAFOs?</p>
+</blockquote>
+<ol>
+<li>Make a new layer from this selection and rename it to <code>EJ_communities_with_3mileCAFO</code></li>
+<li>Change the <strong>Symbology</strong> of this layer
+<ul>
+<li>Under <strong>Primary symbology</strong>, choose <strong>Single Symbol</strong></li>
+<li>Click on the <strong>Symbol</strong> icon &gt;&gt; <strong>Properties</strong>, under <strong>Appearance</strong>, make the fill transparent and the outline color red, and outline width 1.5</li>
+</ul>
+</li>
+<li>In Contents, make only the following layers visible:
+<ul>
+<li><em>EJ_communities_with3mileCAFO</em></li>
+<li><em>EJSCREEN_Iowa_Bivariate</em></li>
+<li><em>EJSCREEN_Iowa</em></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>Locate <img src="http://drive.google.com/uc?export=view&id=1yZumcvyE9nhfLb2ZVXpJFb9--jO9v-FZ" alt="Locate icon" width="33"> cities like Des Moines or Cedar Rapids, then to rural cities in predominant agricultural districts like Storm Lake, and Swipe between the layers – what do you observe that can potentially be attributed further to rural/urban distinctions?</p>
+</blockquote>
+<p><img src="http://drive.google.com/uc?export=view&id=1jnmM8WSgSAk5w73qkVfyP4VwtQSf8CUY" alt="Locate"></p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h2 id="environmental-degradation-due-to-agricultural-practices">6. Environmental Degradation due to Agricultural Practices</h2>
+<h3 id="problem-statement--rationale-1">6.1 Problem Statement &amp; Rationale</h3>
+<p>What impacts do factors such as crop type or farm size have on soil carbon storage and water quality?</p>
+<p>To contextualize our workflow, we need to define and propose our criteria:</p>
+<dl>
+<dt>Crop type</dt>
+<dd>The <em>agricultural land use by field</em> layer is transformed with the predominant land use/land cover cropland data to distinguish the farm fields into four categories: (human) edible crop (e.g. sweet corn, pea), feed crop (e.g. triticale, alfalfa), non-agriculture (e.g. wetlands, forests), and other (e.g. clover.)</dd>
+<dt>Farm size</dt>
+<dd>We will categorize farm size into small, medium, and large based on acreage, using the same data classification scheme we used to bin the EJ community percentile last week: <a href="http://wiki.gis.com/wiki/index.php/Jenks_Natural_Breaks_Classification">Jenks Natural Breaks</a>.  This method emphasizes variance between classes (distinct breaks in the distribution of data.)</dd>
+<dt>Soil carbon change</dt>
+<dd>The <em>soil organic carbon on croplands</em> and <em>potential soil organic carbon on croplands after 20 years of medium scenario</em> layers are rasters, meaning the layers portray in each grid/pixel, the values of soil organic carbon in tons per hectare. Since we have two time periods - 2014 and 2034 - we can calculate the difference in soil carbon storage to quantify change over time. The future projection on potential SOC means that the higher the difference, there’s less potential loss.</dd>
+<dt>Water quality change</dt>
+<dd>Similar to soil carbon change, we need two time periods to demonstrate change in water quality. We will use nitrate testing results in private well water for 2010 and 2020. In particular, we’re looking at the percent change in elevated nitrate tests (&gt;= 10 mg/L). This means if the difference between the two is positive, the water quality became worse; while if the value is negative, the water quality improved.</dd>
+<dt>Unit of analysis</dt>
+<dd>The water quality data is reported at the county level. In order to make comparisons, our derived insights are <a href="http://wiki.gis.com/wiki/index.php/Aggregation">aggregated</a> to Iowa counties.</dd>
+</dl>
+<p>Our workflow:</p>
+<p>First, we’ll breakdown the problem statement into digestible parts as it contains multiple questions. We will start with the following: <em>Does crop type have an impact on soil carbon storage?</em> The processes below can then be replicated for any other combination (i.e. crop type vs. water quality,  farm size vs. SOC…etc.)</p>
+<ul>
+<li>Analyze the agricultural land use by (farm) fields layer to calculate<br>
+and show the composition of crop type for each county</li>
+<li>Create a new data layer that is the difference (the change) between the current and future soil organic carbon value by: Δ = t<sub>2</sub> - t<sub>1</sub></li>
+</ul>
+<h3 id="insert-a-new-map-within-an-existing-project">6.2 Insert a New Map within an Existing Project</h3>
+<ol>
+<li>
+<p>Navigate through  <em>File Explorer</em> &gt;&gt; <em>This PC</em> &gt;&gt; <em>GIS Home (J:/)</em>, to your <em>FarminginIA_yourinitials</em> folder. Double-click on the map project “FarminginIA_yourinitials.aprx”<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1XaeHJLCEnFA2ft8WW8fUmmLveuQzpUOs" alt="Open ArcGIS Pro Map Project"></p>
+</li>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+If this map project is empty and doesn’t contain the map your worked on last week. Check the default workspace in File Explorer >> This PC >> Documents >> ArcGIS >> Projects >> FarminginIA_yourinitials.
+  </div>
+<li>
+<p>In the <strong>Insert</strong> tab &gt;&gt; <strong>New Map</strong>, and rename the map <code>Crop Type and SOC</code><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1Hpy7mndAIzPr-g0ghCWkUCrGCeoqRlMP" alt="Insert new map"></p>
+</li>
+<li>
+<p>Add the following data layers from the <em>FarminginIA_ExerciseData</em> folder from <strong>Catalog</strong>:</p>
+<ul>
+<li><em>IowaCounties.shp</em></li>
+<li><em>IowaFieldBoundaries2019.shp</em></li>
+<li><em>soc_t1_30cm.tif</em></li>
+<li><em>soc_t2_me.tif</em></li>
+</ul>
+</li>
+</ol>
+<h3 id="tabulate-intersection">6.3 Tabulate Intersection</h3>
+<p>The <em>IowaFieldBoundaries2019</em> layer contains individual farm fields in Iowa. <strong>Open Attribute Table</strong> to see the information that would be useful for us, such as “Acres” and “d_MAJORITY” (crop type). We want to know for each county, the area and percentage of each crop type. We use <strong>Tabulate Intersection</strong> to compute these two intersecting layers.</p>
+<ol>
+<li>On the top of the interface, click on the <strong>View</strong> tab &gt;&gt; <strong>Geoprocessing</strong> window <img src="http://drive.google.com/uc?export=view&amp;id=1wr0tmQS6fqQrOV5xOCuyx-7kKvt--uik" alt="Geoprocessing window" width="35"></li>
+<li>Search <code>tabulate intersection</code> and double-click on the tool<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1gVnKcrI9ehdZ4q8lqEhmdp_KxdaANBVo" alt="Search tool"></li>
+<li>In the tool window:
+<ul>
+<li><strong>Input Zone Features</strong>: <strong>IowaCounties</strong></li>
+<li><strong>Zone Fields</strong>: CountyName</li>
+<li><strong>Input Class Features</strong>: IowaFieldBoundaries2019</li>
+<li><strong>Output Table</strong>: name the output file <code>TabulateCropType</code></li>
+<li><strong>Class Fields</strong>: d_MAJORITY</li>
+<li><strong>Output Units</strong>: Acres</li>
+<li>Click <strong>Run</strong><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1K0QvCW4DJOkaSfqRe2uKH34MIPWlkyv8" alt="Tabulate intersection"></li>
+</ul>
+</li>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+Note that our output table is saved to our project .gdb, which is a geodatabase - a spatial folder that can accommodate various spatial data formats.
+  </div>
+<li>Once the geoprocessing finishes, the output table <em>TabulateCropType</em> will show up under <strong>Contents</strong>. Right-click to open the table. You will see that the same county has several records (rows) - each for a crop type, its area in acres, and the percentage that it takes up in the overall area of the county.</li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="pivot-table">6.4 Pivot Table</h3>
+<p>In order to visualize the composition of crop types within each county, we need the crop types as individual attributes that is associated to just one county. This is referred to as “flattening one-to-many relationships,” and we use <strong>Pivot Table</strong> to achieve the below:</p>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=11Q1rYu749496Hc0Bv2JEG8H9O49NnEUA" alt="Pivot table"></p>
+<ol>
+<li>In the <strong>Geoprocessing</strong> pane, search and open the <strong>Pivot Table</strong> tool
+<ul>
+<li><strong>Input Table</strong>: TabulateCropType</li>
+<li><strong>Input Field</strong>: CountyName</li>
+<li><strong>Pivot Field</strong>: d_MAJORITY</li>
+<li>Click <strong>Run</strong><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=19piRSXr6bSJRZL305gcOli3_yt2sz_Em" alt="Pivot table tool"></li>
+</ul>
+</li>
+<li>Once the geoprocessing finishes, a new table <em>TabulateCropType_PivotTable</em> gets added to your <strong>Contents</strong>. Open the table to see the transposed results.</li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="join-field">6.5 Join Field</h3>
+<p>The crop type information we derived for each county is tabular, with no geometries associated with them. However, we do have geographic information in the table that is unique to each record: the county name. We also have the county geometries portrayed by the <em>IowaCounties</em> layer. To add the tabular data to the counties shapes, we use the county name that they both share.</p>
+<ol>
+<li>In the <strong>Geoprocessing</strong> pane, search and open the <strong>Join Field</strong> tool
+<ul>
+<li><strong>Input Table</strong>: IowaCounties</li>
+<li><strong>Input Join Field</strong>: CountyName</li>
+<li><strong>Join Table</strong>: TabulateCropType_PivotTable</li>
+<li><strong>Join Table Field</strong>: CountyName</li>
+<li><strong>Transfer Fields</strong>:
+<ul>
+<li>Edible Crop</li>
+<li>Feed Crop</li>
+<li>Non Agriculture</li>
+<li>Other</li>
+</ul>
+</li>
+<li>Click <strong>Run</strong><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1F9odW9JHDX1gZ3uei0w0AHe16IDQ7xyW" alt="Join field"></li>
+</ul>
+</li>
+<li>Once the geoprocessing finishes, <strong>Open the Attribute Table</strong> for <em>IowaCounties</em> and you will see that the crop type attributes are added.</li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="chart-symbols">6.6 Chart Symbols</h3>
+<p>We can visualize the crop composition for each county using chart symbols.</p>
+<ol>
+<li>Open <strong>Symbology</strong> for <em>IowaCounties</em>
+<ul>
+<li>Under <strong>Primary symbology</strong>, choose <strong>Charts</strong></li>
+<li>Next, under <strong>Chart type</strong>, select <strong>Pie Chart</strong></li>
+<li>In Fields, select:
+<ul>
+<li>Edible_Cro</li>
+<li>Feed_Crop</li>
+<li>Non_Agricu</li>
+<li>Other</li>
+</ul>
+</li>
+<li>On the right to each field, rename the <strong>Labels</strong>:
+<ul>
+<li><code>Human Edible Crop</code></li>
+<li><code>Feed/Commodity Crop</code></li>
+<li><code>Non Agriculture</code></li>
+<li><code>Other</code></li>
+</ul>
+</li>
+<li>Change the color ramp to “Set 1 (4 Classes)”<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1Z_Pm7Gt6vE0WgHZLdDZWFG59XyxFEIs2" alt="Chart symbology"></li>
+</ul>
+</li>
+<li>In <strong>Contents</strong>, turn off all the other layers except for <em>IowaCounties</em></li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="raster-calculations">6.7 Raster Calculations</h3>
+<p>To quantify change in soil carbon, we need two data layers that represent two time periods: <em>soc_t1_30cm.tif</em> (current) and <em>soc_t2_me.tif</em> (future). These two layers are raster data (fields view) as opposed to vector data (discrete objects view) that we have been using so far. The values in each cell/pixel represent soil organic carbon in tons per hectare. Our goal here is to calculate the average change in soil carbon for each county, to see if the composition in crop type has an impact, i.e. less soil carbon in counties that have more commodity crop.</p>
+<ol>
+<li>On the top of the interface, click on <strong>Analysis</strong> tab &gt;&gt; <strong>Raster Functions</strong></li>
+<li>Under <strong>Math</strong>, click on <strong>Minus</strong><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1CuEl25suGk_QZy_Uiio3E1g_pekGO3oH" alt="Raster function: minus"></li>
+<li>For the value in each cell, the Minus function subtracts the second input from the first, so our inputs are: <em>soc_t2_me.tif</em> - <em>soc_t1_30cm.tif</em><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1LPTb8WIIL7o-800OP_a_33KIQnciFVc_" alt="Raster function: minus properties">
+<ul>
+<li>Click <strong>Create New Layer</strong></li>
+</ul>
+</li>
+<li>Rename the new raster layer that gets created (<em>Minus_soc_t2_me.tif_soc_t1_30cm.tif</em>) to <code>Change in SOC</code></li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1i0Zdve_lMxECHJuQkecPI560jMNAVE-X" alt="Crop type and SOC"></p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="reclassify-field">6.8 Reclassify Field</h3>
+<p>When we examine the farm fields layer (<em>IowaFieldBoundaries2019</em>), we currently have quantitative information about the farm size (in “Acres”), but we don’t have categorical information that contextualizes them in small, medium, or large. To do this, we will use <strong>Reclassify Field</strong> that classifies the acreage into those specified categories.</p>
+<ol>
+<li>In <strong>Geoprocessing</strong>, search and open <strong>Reclassify Field</strong>.
+<ul>
+<li><strong>Input Table</strong>: IowaFieldBoundaries2019</li>
+<li><strong>Field to Reclassify</strong>: Acres</li>
+<li><strong>Reclassification Method</strong>: Natural breaks (Jenks)</li>
+<li><strong>Number of Classes</strong>: 3</li>
+<li><strong>Output Field Name</strong>: <code>FarmSize</code></li>
+</ul>
+</li>
+</ol>
+<p><img src="http://drive.google.com/uc?export=view&amp;id=1RzHPuSDirJbJpCNRv-KNPt3hxnWvAy2G" alt="Reclassify field"></p>
+<ol start="2">
+<li>Once the geoprocessing finishes, you will see two new fields added: “FarmSize” and “FarmSize_R.” This tool coded the numeric ranges into categorical data, i.e.:</li>
+</ol>
+
+<table>
+<thead>
+<tr>
+<th>FarmSize</th>
+<th>Description</th>
+<th>Acres</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Small</td>
+<td>0.000010 - 48.203499</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Medium</td>
+<td>48.203500 - 129.522995</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Large</td>
+<td>129.522996 - 2518.120117</td>
+</tr>
+</tbody>
+</table>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+Now that you have the “FarmSize” information, you can follow the same procedures as “CropType”
+  </div>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="calculate-new-field">6.9 Calculate New Field</h3>
+<p>To investigate the change in water quality, we want to calculate the percent change in elevated nitrate tests for each county.</p>
+<ol>
+<li>Add the following two tables to your map: <em>Nitrate_County2010.csv</em> and <em>Nitrate_County2020.csv</em></li>
+<li>Follow the previous <strong>Join Field</strong> procedures to join both 2010 and 2020 tables to your <em>IowaCounties</em> layer</li>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+Hint: the shared common field is "CountyName"
+  </div>
+<li>After each join, you should rename the column header to <code>PerElev_year</code> so you can distinguish the two columns<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1dUSOeBUr3WnNJfN5X_Zu7ybr05DL-ua8" alt="Change field name"></li>
+<li>Your <em>IowaCounties</em> layer should have two additional columns: “PerElev_2010” and “PerElev_2020”<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=17S-GX9bRuvjvQaHmeUnWCslsYKM1tPSz" alt="IowaCounties attribute table with 2010 and 2020 percent elevated nitrate"></li>
+<li>On the top left corner of the IowaCounties attribute table, click <strong>Add Field</strong> <img src="http://drive.google.com/uc?export=view&amp;id=1VyJP4UnmN1pTmFjZ716YskaaW_DabvQQ" alt="Add table field" width="175">
+<ul>
+<li>For <strong>Field Nam</strong>e, type in <code>NitrateCha</code></li>
+<li>For <strong>Data Type</strong>, choose “Double” (this allows decimals)<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1w4L4A9dk8iMFM0Q7OyK3De7n_l28A92P" alt="Add table field parameters"></li>
+<li>Click <strong>Save</strong> on top at the ribbon to save this edit <img src="http://drive.google.com/uc?export=view&amp;id=146F7GdYlxr11CTknSUBDjvBPoXDnYcrf" alt="Save edits"></li>
+</ul>
+</li>
+<li>Back in the <em>IowaCounties</em> table, you will see this “NitrateCha” field. Next to Add Field, click on <strong>Calculate Field</strong>. <img src="http://drive.google.com/uc?export=view&amp;id=1E8wXM9qPy4Q9qJeA570OqMSvIHhpyMPO" alt="Calculate field" width="180"></li>
+<li>In the Calculate Field window:
+<ul>
+<li>For <strong>Field Name</strong>, select “NitrateCha”</li>
+<li>To the Expression, you double-click to select the appropriate column, i.e. <em>PerElev_2020 - PerElev2010</em><br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1L4w0pwfka4krsDPG1vFYHCy1W5T28qjE" alt="Calculate field parameters"></li>
+</ul>
+</li>
+<li>Click OK, and you will see a new field that is the change in percent elevated nitrate levels between 2010 and 2020.<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1Sn8pdiD0cXxaUjXFf15U7Kj_p8CUaaRA" alt="New calculated field that shows change in elevated nitrate levels"></li>
+</ol>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+You can make a copy of the IowaCounties layer in your Contents, then symbolize the “NitrateCha” field to show changes in water quality
+  </div>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h2 id="communicating-with-maps">7. Communicating with Maps</h2>
+<p>In the past two weeks, we learned several spatial analysis techniques to derive insights using existing data layers. By doing so, you also created new spatial data layers that you can incorporate into your final map to illustrate your argument.</p>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6;"><i class="material-icons">lightbulb_outline</i>
+You can navigate to sections by clicking on the tutorial's Table of Contents on the left.
+  </div>
+<h3 id="compilation-of-problem-statements-and-suggested-layers-to-use">7.1 Compilation of Problem Statements and Suggested Layers to Use</h3>
+<p>Based on our two large questions to explore:</p>
+<ol>
+<li>Are factors such as crop type or farm size associated with different levels of impact on soil carbon storage or water quality?</li>
+<li>Can we detect environmental justice issues in the sitings of concentrated animal feeding operations (CAFOs)?</li>
+</ol>
+<p>Your map can potentially address any of the following questions:</p>
+<ul>
+<li>Does crop type have an impact on soil carbon storage?
+<ul>
+<li><em>IowaCounties</em> (symbolized with “Ediblee_Cro”, “Feed_Crop”, “Non_Agricu”, “Other” fields)</li>
+<li><em>Change in SOC</em> raster</li>
+</ul>
+</li>
+<li>Is crop type associated with changes in water quality, as measured by changes in elevated nitrate tests in private wells? (i.e. Do counties with higher percentages of commodity/feed crop type also have more increases in elevated nitrate tests than counties with lower percentage acres of commodity/feed crops?)
+<ul>
+<li><em>IowaCounties</em> (symbolized with crop type fields)</li>
+<li><em>IowaCounties</em> (symbolized using “NitrateCha” field)</li>
+</ul>
+</li>
+<li>Does farm size have an impact on soil carbon storage?
+<ul>
+<li><em>IowaCounties</em> (symbolized with “FarmSize” field)</li>
+<li><em>Change in SOC</em> raster</li>
+</ul>
+</li>
+<li>Is farm size associated with increases in elevated nitrate test results in private wells? (i.e. Do counties with large farm sizes also show increases in elevated nitrate tests in private wells and likewise do counties with small farm sizes show lower increases or no increases in elevated nitrate levels?)
+<ul>
+<li><em>IowaCounties</em> (symbolized with “FarmSize” field)</li>
+<li><em>IowaCounties</em> (symbolized with “NitrateCha” field)</li>
+</ul>
+</li>
+<li>Do CAFOs impact socially vulnerable communities in the high percentile, and which EJ communities are particularly burdened?
+<ul>
+<li><em>EJSCREEN_Iowa</em> (using either the “P_VULEPOCT” field, or bivariate using  “P_MINORPCT” and “P_LWINCPCT” fields)</li>
+<li><em>EJ_communities_with3mileCAFO</em></li>
+</ul>
+</li>
+<li>The Iowa Department of Natural Resources/Environmental Protection stipulated that CAFOs that are in the “open feedlot” category needs to be 200ft away from a private well.<sup class="footnote-ref"><a href="#fn7" id="fnref7">7</a></sup> How many, if any, open feedlot CAFOs violate this regulation?
+<ul>
+<li><em>Private_Well_Facilities</em></li>
+<li><em>animal_feeding_operations</em></li>
+</ul>
+</li>
+</ul>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #31708f; background-color: #d9edf7; border-color: #bce8f1;"><i class="material-icons">info_outline</i>
+The data layers listed are suggested. You should make your own decisions on what makes sense to include in your map. It's good practice to build one layer up at a time, and oftentimes, "less is more."
+  </div>
+<h3 id="map-layout">7.2 Map Layout</h3>
+<p>We’ve been working on maps as a GIS map file. The map file (in our case, ArcGIS Pro Map Project .aprx) references the data layers, symbology…etc. in the program, and unless someone else also has all the data and ArcGIS Pro, they won’t be able to access your map. That’s why we need to create a map layout and export it as an image file or .pdf.</p>
+<h4 id="insert-a-new-layout">7.2.1 Insert a New Layout</h4>
+<ol>
+<li>Open your map project “FarminginIA_yourinitials.aprx”</li>
+<li>In the <strong>Insert</strong> tab &gt;&gt; <strong>New Layout</strong>, and choose “Letter - Landscape”<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1qLbneiLZBq2OQ40oav8yRrgFFgiW-jjI" alt="Insert new layout"></li>
+</ol>
+<h3 id="basic-map-elements">7.3 Basic Map Elements</h3>
+<p>Your layout should include these basic elements:</p>
+<ul>
+<li>A descriptive title</li>
+<li>Legend</li>
+<li>Map frame</li>
+<li>North arrow</li>
+<li>Scale</li>
+<li>Date, authorship, and data sources<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1rrXfKjNQKai8y0kZbKASp1a0CvNUDBtH" alt="Basic map elements"></li>
+</ul>
+<p>To insert an element, click on the respective icon, then <strong>Format</strong> further to your liking.<br>
+<img src="http://drive.google.com/uc?export=view&amp;id=1gPSc7NH0fuN5AWQA33TfAp0Psm9Yzt2D" alt="Insert map elements"></p>
+<iframe width="850" height="480" src="https://www.youtube.com/embed/G-a4Qowfi0o" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div style="padding: 15px; border: 1px solid transparent; border-color: transparent; margin-bottom: 20px; border-radius: 4px; color: #8a6d3b;; background-color: #fcf8e3; border-color: #faebcc;"><i class="material-icons">warning</i>
+Save <i class="material-icons">save</i> your map.
+  </div>
+<h3 id="map-design">7.4 Map Design </h3>
+<p>"An aesthetically pleasing map is also going to be a map that communicates elegantly."<sup class="footnote-ref"><a href="#fn8" id="fnref8">8</a></sup></p>
+<p>Read through <a href="https://www.esri.com/news/arcuser/0112/files/design-principles.pdf">"Make Maps People Want to Look At"</a>, and you can reference best practice suggestions for each map element in <a href="https://faculty.ksu.edu.sa/sites/default/files/gis_cartography.pdf">GIS Cartography: A Guide to Effective Map Design</a></p>
+<h3 id="get-feedback-on-your-map">7.5 Get Feedback on Your Map</h3>
+<p>“Pac-Man prefers Southeastern Iowa. And, what are the values for Soil Organic Carbon?” - Jon, Director of the SAL</p>
+<p>In pairs, we will use <a href="https://drive.google.com/file/d/1nzPl5jQqRnp4zM5Nan2aZM74tXC4H6ZZ/view?usp=sharing">this map evaluation guidelines</a> by renowned cartographer Kenneth Field to give feedback on each others' maps.
+<h3 id="export-map">7.6 Export Layout</h3>
+<ol>
+  <li>In the <strong>Share</strong> tab &gt;&gt; <strong>Export Layout</strong></li>
+<ul>
+  <li><strong>File Type</strong>: JPEG</li>
+  <li><strong>Resolution</strong>: 600 DPI</li>
+  </ul>
+</ol>
+<img src="http://drive.google.com/uc?export=view&id=1xl312lFR5Z-FEuXgHO2j1QPTtkokWx7M" alt="Basic map elements"></li>
+<h3 id="section"></h3>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Revised from description written by Denise Lello <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>Evan A. Thaler et al., “<a href="https://doi.org/10.1029/2021EF002396">Rates of Historical Anthropogenic Soil Erosion in the Midwestern United States</a>” <em>Earth’s Future</em> 10, no. 3 (2022). <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>Image source: USGS <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>p.20, <a href="https://www.epa.gov/sites/default/files/2021-04/documents/ejscreen_technical_document.pdf">EJSCREEN Technical Documentation</a> <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>p.21, EJSCREEN Technical Documentation <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p>US Census Bureau, <a href="https://www.census.gov/library/stories/2020/09/poverty-rates-for-blacks-and-hispanics-reached-historic-lows-in-2019.html">Inequalities Persist Despite Decline in Poverty For All Major Race and Hispanic Origin Groups</a>, 2020 <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p><a href="https://www.iowadnr.gov/Environmental-Protection/Animal-Feeding-Operations/AFO-Construction-Permits#:~:text=Open%20feedlots,%20solids,and%20deep%20wells">AFO construction permits</a> <a href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p>Gretchen Peterson, <a href="https://faculty.ksu.edu.sa/sites/default/files/gis_cartography.pdf">GIS Cartography: A Guide to Effective Map Design</a> <a href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+    </div>
+  </div>
+</body>
+
+</html>
